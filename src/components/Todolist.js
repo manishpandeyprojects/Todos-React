@@ -1,37 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import TodoItem from './TodoItem';
+import uuid from 'react-uuid';
 
 
 export default function Todolist() {
-
-
-    let todoListData = [
-        {
-            id: 1,
-            todoItem: "First A simple primary alert—check it out!",
-            color: "primary"
-        },
-        {
-            id: 2,
-            todoItem: "Second A simple primary alert—check it out!",
-            color: "primary"
-        },
-        {
-            id: 3,
-            todoItem: "First A simple primary alert—check it out!",
-            color: "success"
-        },
-        {
-            id: 4,
-            todoItem: "Second A simple primary alert—check it out!",
-            color: "primary"
-        },
-        {
-            id: 5,
-            todoItem: "First A simple primary alert—check it out!",
-            color: "success"
-        },
-    ];
 
     const [todoData, setTodoData] = useState([]);
     const [todoItem, setTodoItem] = useState('');
@@ -45,7 +17,7 @@ export default function Todolist() {
         console.log(todoItem);
         console.log(todoColor);
         if (todoItem !== "" && todoColor !== "") {
-            let newTodoItem = todoData.concat([{ id: todoData.length + 1, todoItem: todoItem, color: todoColor }]);
+            let newTodoItem = todoData.concat([{ id: uuid(), todoItem: todoItem, color: todoColor }]);
             setTodoData(newTodoItem);
             setTodoItem("");
             setTodoColor("");
@@ -62,13 +34,11 @@ export default function Todolist() {
 
     useEffect(() => {
         if (todoData.length > 0) {
-            console.log("Set Localstorage")
             localStorage.setItem('todo', JSON.stringify(todoData));
         }
     }, [todoData]);
 
     useEffect(() => {
-        console.log(JSON.parse(localStorage.getItem('todo')));
         setTodoData(JSON.parse(localStorage.getItem('todo')));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -84,7 +54,7 @@ export default function Todolist() {
                         </div>
                         <div className="mb-3">
                             <select className="form-select" value={todoColor} onChange={handleSelect} id='selecteColor'>
-                                <option value="" selected>Select Color</option>
+                                <option value="" disabled>Select Color</option>
                                 <option value="primary">Primary</option>
                                 <option value="secondary">Secondary</option>
                                 <option value="success">Success</option>
