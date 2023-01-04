@@ -12,10 +12,6 @@ export default function Todolist() {
 
     const addTodoItem = async (event) => {
         event.preventDefault();
-
-        console.log(todoData.length + 1);
-        console.log(todoItem);
-        console.log(todoColor);
         if (todoItem !== "" && todoColor !== "") {
             let newTodoItem = todoData.concat([{ id: uuid(), todoItem: todoItem, color: todoColor }]);
             setTodoData(newTodoItem);
@@ -43,10 +39,18 @@ export default function Todolist() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const deleteTodoItem = (id)=>{
+        let afterRemoveTodo = todoData.filter((element)=>{
+            return element.id !== id;
+        })
+        setTodoData(afterRemoveTodo);
+    }
+
     return (
         <div className='container'>
             <div className="row">
                 <div className="col-lg-12 my-3">
+                    <h2 className='text-center'>Schedule your work for today</h2>
                     <form onSubmit={addTodoItem}>
                         <div className="mb-3">
                             <label htmlFor="todoItem" className="form-label">Todo Item</label>
@@ -60,7 +64,7 @@ export default function Todolist() {
                                 <option value="success">Success</option>
                             </select>
                         </div>
-                        <button type="submit" className="btn btn-primary">Add Item</button>
+                        <button type="submit" className="btn btn-primary" disabled={!todoItem || !todoColor}>Add Item</button>
                     </form>
                 </div>
 
@@ -68,19 +72,19 @@ export default function Todolist() {
                 <div className="col-lg-4">
                     <div className="list-group my-3">
                         {todoData.filter(element => element.color === "primary")
-                            .map((element) => <TodoItem key={element.id} description={element.todoItem} color={element.color} />)}
+                            .map((element) => <TodoItem key={element.id} id={element.id} deleteTodo={deleteTodoItem} description={element.todoItem} color={element.color} />)}
                     </div>
                 </div>
                 <div className="col-lg-4">
                     <div className="list-group my-3">
                         {todoData.filter(element => element.color === "success")
-                            .map((element) => <TodoItem key={element.id} description={element.todoItem} color={element.color} />)}
+                            .map((element) => <TodoItem key={element.id} id={element.id} deleteTodo={deleteTodoItem} description={element.todoItem} color={element.color} />)}
                     </div>
                 </div>
                 <div className="col-lg-4">
                     <div className="list-group my-3">
                         {todoData.filter(element => element.color === "secondary")
-                            .map((element) => <TodoItem key={element.id} description={element.todoItem} color={element.color} />)}
+                            .map((element) => <TodoItem key={element.id} id={element.id} deleteTodo={deleteTodoItem} description={element.todoItem} color={element.color} />)}
                     </div>
                 </div>
             </div>
